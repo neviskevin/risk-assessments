@@ -13,6 +13,10 @@ num = 10
 incx = abs(abs(data["x"].min()) - abs(data["x"].max()))/degree
 incy = abs(abs(data["y"].max()) - abs(data["y"].min()))/degree
 
+#here we only include the firerisk scores of more than 4.5
+data = data[data["fire_risk"]>4.9]
+print(data.shape)
+
 # here we calculate the sum of the risk values and
 # then make a list of the ten most risky points in each region
 x = 0
@@ -28,15 +32,15 @@ while(x<(degree-1)):#change to degree
         z = temp["fire_risk"].sum()
         temp["subSum"] = z
 
-        temp = temp.nlargest(num,['fire_risk'])
+        #only keep largest 'num' of fire_risk values
+        #temp = temp.nlargest(num,['fire_risk'])
         
-        if(temp.shape[0]==num):
-            final = pd.concat([final,temp])
+        final = pd.concat([final,temp])
         y = y + 1
     y = 0
     x = x + 1
 
-
-final.pop('Unnamed: 0')
-
+#remove unneeded column
+#final.pop('Unnamed: 0')
+print(final.shape)
 final.to_csv("output.csv")
